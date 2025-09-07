@@ -1,17 +1,19 @@
 import os
 from pathlib import Path
 from functools import cache
-from conan.tools.files import save, load
+from conan.tools.files import save, load, rmdir
 from conan.api.conan_api import ConanAPI
 from conan.api.output import ConanOutput, ConanException
 
 output = ConanOutput()
 project_root = Path(__file__).parents[1]
 output_folder = project_root / "output"
+rmdir(None, output_folder)
+
 generated_template_folder = output_folder / "generated_template"
-test_output_folder = output_folder / "generated_template"
+test_output_folder = output_folder / "test_new"
 target_folder = Path("templates/command/new")
-target_templates = ["cmake_lib", "cmake_exe"]
+target_templates = ["cmake_exe", "cmake_lib"]
 
 
 @cache
@@ -54,21 +56,28 @@ def save_template_files_with_vscode(template: str, output_folder: Path):
 
 
 for template in target_templates:
+    cache_folder = Path(ConanAPI().cache_folder)
     new_template_name = f"vscode_{template}"
     output.highlight(f"Bootstrap template: {new_template_name}")
+    curr_template_dir = generated_template_folder / new_template_name
     save_template_files_with_vscode(
         template,
-        generated_template_folder / new_template_name,
+        curr_template_dir,
     )
     output.highlight(f"Install template: {new_template_name}")
+    curr_target_dir = cache_folder / target_folder / new_template_name
+    if (curr_target_dir).exists():
+        output.warning(f"remove previously installed template {new_template_name}")
+        rmdir(None, str(curr_target_dir))
     ConanAPI().config.install(
-        str(generated_template_folder / new_template_name),
+        str(curr_template_dir),
         verify_ssl=False,
         target_folder=str(target_folder / new_template_name),
     )
     output.highlight(f"Test template: {new_template_name}")
+    curr_test_dir = test_output_folder / new_template_name
     ConanAPI().new.save_template(
         new_template_name,
-        output_folder=test_output_folder / new_template_name,
+        output_folder=curr_test_dir,
         force=True,
     )

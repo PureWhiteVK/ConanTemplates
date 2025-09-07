@@ -20,7 +20,9 @@
             "command": "conan",
             "args": [
                 "install",
-                "-s='build_type=Debug'",
+                "--settings='build_type=Debug'",
+                "--conf='tools.cmake.cmaketoolchain:extra_variables={\\\"CMAKE_EXPORT_COMPILE_COMMANDS\\\": \\\"True\\\"}'",
+                "--conf='tools.cmake.cmaketoolchain:generator=Ninja'",
                 ".",
                 "--build=missing"
             ],
@@ -32,7 +34,9 @@
             "command": "conan",
             "args": [
                 "install",
-                "-s='build_type=Release'",
+                "--settings='build_type=Release'",
+                "--conf='tools.cmake.cmaketoolchain:extra_variables={\\\"CMAKE_EXPORT_COMPILE_COMMANDS\\\": \\\"True\\\"}'",
+                "--conf='tools.cmake.cmaketoolchain:generator=Ninja'",
                 ".",
                 "--build=missing"
             ],
