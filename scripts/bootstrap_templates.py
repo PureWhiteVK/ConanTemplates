@@ -4,7 +4,7 @@ from pathlib import Path
 from functools import cache
 from conan.tools.files import save, load, rmdir, replace_in_file
 from conan.api.conan_api import ConanAPI
-from conan.api.output import ConanOutput, ConanException
+from conan.api.output import ConanException
 from conan import ConanFile
 
 fake_conanfile = ConanFile(display_name="bootstrap_templates")
@@ -69,7 +69,7 @@ def save_template_files_with_vscode(template: str, output_folder: Path):
         output.success("File saved: %s" % f)
 
 
-ConanAPI().profiles.detect()
+subprocess.run(["conan", "profile", "detect", "--force"], check=True)
 
 for template in target_templates:
     cache_folder = Path(ConanAPI().cache_folder)
