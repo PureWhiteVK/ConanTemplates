@@ -52,20 +52,26 @@ def save_template_files_with_vscode(template: str, output_folder: Path):
     if not template_files and not non_template_files:
         raise ConanException(f"Template doesn't exist or not a folder: {template}")
 
-    replace_str = """tc = CMakeToolchain(self,generator="Ninja")
-        tc.cache_variables["CMAKE_EXPORT_COMPILE_COMMANDS"] = True"""
+    replace_config = {
+        "cmake_layout(self)": """self.cmake_generator = "Ninja"
+        cmake_layout(self,generator=self.cmake_generator)""",
+        "tc = CMakeToolchain(self)": """tc = CMakeToolchain(self,generator=self.cmake_generator)
+        tc.cache_variables["CMAKE_EXPORT_COMPILE_COMMANDS"] = True""",
+    }
 
     template_files.update(vscode_template_files)
     for f, v in sorted(template_files.items()):
         path = os.path.join(output_folder, f)
         save(conanfile=fake_conanfile, path=path, content=v)
         if f == "conanfile.py":
-            replace_in_file(
-                fake_conanfile,
-                path,
-                search="tc = CMakeToolchain(self)",
-                replace=replace_str,
-            )
+            for search, replace in replace_config.items():
+                # replace cmake_layout and CMakeToolchain here
+                replace_in_file(
+                    fake_conanfile,
+                    path,
+                    search=search,
+                    replace=replace,
+                )
         output.success("File saved: %s" % f)
 
 

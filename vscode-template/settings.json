@@ -9,7 +9,7 @@
         "--background-index-priority=background",
         "--clang-tidy",
         "--completion-style=bundled",
-        "--header-insertion=never",
+        "--header-insertion=iwyu",
         "--pch-storage=disk",
         "-j=8"
     ],

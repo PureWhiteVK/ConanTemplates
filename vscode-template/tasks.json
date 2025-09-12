@@ -24,7 +24,7 @@
                 ".",
                 "--build=missing"
             ],
-            "hide": true
+            "group": "build",
         },
         {
             "label": "Conan: Install Dependency [Release]",
@@ -36,10 +36,10 @@
                 ".",
                 "--build=missing"
             ],
-            "hide": true
+            "group": "build",
         },
         {
-            "label": "Conan: Install Dependency",
+            "label": "Conan: Install Dependency [Debug & Release]",
             "group": "build",
             "dependsOn": [
                 "Conan: Install Dependency [Debug]",
