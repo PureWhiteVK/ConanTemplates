@@ -21,8 +21,6 @@
             "args": [
                 "install",
                 "--settings='build_type=Debug'",
-                "--conf='tools.cmake.cmaketoolchain:extra_variables={\\\"CMAKE_EXPORT_COMPILE_COMMANDS\\\": \\\"True\\\"}'",
-                "--conf='tools.cmake.cmaketoolchain:generator=Ninja'",
                 ".",
                 "--build=missing"
             ],
@@ -35,31 +33,17 @@
             "args": [
                 "install",
                 "--settings='build_type=Release'",
-                "--conf='tools.cmake.cmaketoolchain:extra_variables={\\\"CMAKE_EXPORT_COMPILE_COMMANDS\\\": \\\"True\\\"}'",
-                "--conf='tools.cmake.cmaketoolchain:generator=Ninja'",
                 ".",
                 "--build=missing"
             ],
             "hide": true
         },
         {
-            "label": "CMake: Select Configure Preset",
-            "command": "${command:cmake.selectConfigurePreset}",
-            "hide": true
-        },
-        {
-            "label": "CMake: Configure",
-            "command": "${command:cmake.configure}",
-            "hide": true
-        },
-        {
-            "label": "Conan: Install & CMake: Configure",
+            "label": "Conan: Install Dependency",
             "group": "build",
             "dependsOn": [
                 "Conan: Install Dependency [Debug]",
                 "Conan: Install Dependency [Release]",
-                "CMake: Select Configure Preset",
-                "CMake: Configure"
             ],
             "dependsOrder": "sequence"
         },
